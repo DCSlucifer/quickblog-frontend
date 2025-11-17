@@ -6,6 +6,7 @@ import toast from 'react-hot-toast'
 
 const Dashboard = () => {
 
+    // Dashboard data state
     const [dashboardData, setDashboardData] = useState({
         blogs: 0,
         comments: 0,
@@ -15,24 +16,28 @@ const Dashboard = () => {
 
     const { axios } = useAppContext()
 
-     const fetchDashboard = async ()=>{
+    // Fetch dashboard statistics and recent blogs
+    const fetchDashboard = async () => {
        try {
-         const {data} = await axios.get('/api/admin/dashboard')
+         const { data } = await axios.get('/api/admin/dashboard')
          data.success ? setDashboardData(data.dashboardData) : toast.error(data.message)
        } catch (error) {
             toast.error(error.message)
        }
      }
 
-     useEffect(()=>{
+     // Fetch dashboard data on component mount
+     useEffect(() => {
         fetchDashboard()
-     },[])
+     }, [])
 
   return (
     <div className='flex-1 p-4 md:p-10 bg-blue-50/50'>
 
+        {/* Statistics cards section */}
         <div className='flex flex-wrap gap-4'>
 
+            {/* Total blogs card */}
             <div className='flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all'>
                 <img src={assets.dashboard_icon_1} alt="" />
                 <div>
@@ -41,6 +46,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* Total comments card */}
             <div className='flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all'>
                 <img src={assets.dashboard_icon_2} alt="" />
                 <div>
@@ -49,6 +55,7 @@ const Dashboard = () => {
                 </div>
             </div>
 
+            {/* Total drafts card */}
             <div className='flex items-center gap-4 bg-white p-4 min-w-58 rounded shadow cursor-pointer hover:scale-105 transition-all'>
                 <img src={assets.dashboard_icon_3} alt="" />
                 <div>
@@ -58,14 +65,18 @@ const Dashboard = () => {
             </div>
         </div>
 
+        {/* Recent blogs table section */}
         <div>
+            {/* Table header */}
             <div className='flex items-center gap-3 m-4 mt-6 text-gray-600'>
                 <img src={assets.dashboard_icon_4} alt="" />
                 <p>Latest Blogs</p>
             </div>
 
+            {/* Blogs table */}
             <div className='relative max-w-4xl overflow-x-auto shadow rounded-lg scrollbar-hide bg-white'>
                 <table className='w-full text-sm text-gray-500'>
+                    {/* Table head */}
                     <thead className='text-xs text-gray-600 text-left uppercase'>
                         <tr>
                             <th scope='col' className='px-2 py-4 xl:px-6'> # </th>
@@ -75,8 +86,9 @@ const Dashboard = () => {
                             <th scope='col' className='px-2 py-4'> Actions </th>
                         </tr>
                     </thead>
+                    {/* Table body - recent blogs */}
                     <tbody>
-                        {dashboardData.recentBlogs.map((blog, index)=>{
+                        {dashboardData.recentBlogs.map((blog, index) => {
                             return <BlogTableItem key={blog._id} blog={blog} fetchBlogs={fetchDashboard} index={index + 1}/>
                         })}
                     </tbody>
