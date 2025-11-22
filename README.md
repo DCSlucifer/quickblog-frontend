@@ -364,19 +364,19 @@ QuickBlog-FullStack/
 │   │   └── swagger.js    # API documentation
 │   ├── controllers/       # Route controllers
 │   │   ├── adminController.js
-│   │   └── blogController.js
+│   │   ├── blogController.js
 │   ├── middleware/        # Custom middleware
 │   │   ├── auth.js       # JWT authentication
 │   │   ├── validator.js  # Input validation
 │   │   ├── multer.js     # File upload
 │   │   ├── errorHandler.js  # Error handling
-│   │   └── logger.js     # Request logging
+│   │   ├── logger.js     # Request logging
 │   ├── models/           # Database models
 │   │   ├── Blog.js
-│   │   └── Comment.js
+│   │   ├── Comment.js
 │   ├── routes/           # API routes
 │   │   ├── adminRoutes.js
-│   │   └── blogRoutes.js
+│   │   ├── blogRoutes.js
 │   ├── utils/            # Utility functions
 │   │   └── errors.js     # Custom error classes
 │   ├── uploads/          # Temporary upload folder
