@@ -1,5 +1,6 @@
 import React from 'react';
 import { assets, footer_data } from '../assets/assets';
+import toast from 'react-hot-toast';
 
 const Footer = () => {
   return (
@@ -24,13 +25,56 @@ const Footer = () => {
                 {section.title}
               </h3>
               <ul className="text-sm space-y-1">
-                {section.links.map((link, i) => (
-                  <li key={i}>
-                    <a href="#" className="hover:underline transition">
-                      {link}
-                    </a>
-                  </li>
-                ))}
+                {section.links.map((link, i) => {
+                  // Define link destinations
+                  let href = '#';
+                  let onClick = null;
+
+                  if (section.title === 'Quick Links') {
+                    if (link === 'Home') href = '/';
+                    else if (link === 'All Blogs') href = '/';
+                    else if (link === 'About') href = '#';
+                    else if (link === 'Contact') {
+                        href = '#';
+                        onClick = (e) => {
+                            e.preventDefault();
+                            toast((t) => (
+                                <span>
+                                  <b>Contact Info:</b><br/>
+                                  📞 0393643864<br/>
+                                  📧 vothanhdanh8208@gmail.com
+                                </span>
+                              ), {
+                                duration: 5000,
+                                icon: 'ℹ️',
+                              });
+                        }
+                    }
+                  } else if (section.title === 'Categories') {
+                    href = `/#${link.toLowerCase()}`; // Scroll to category
+                  } else if (section.title === 'Follow Us') {
+                    // Social media links
+                    if (link === 'Facebook') href = 'https://www.facebook.com/Danhlucifer2304';
+                    else if (link === 'Instagram') href = 'https://www.instagram.com/t.danh_vo/';
+                    else if (link === 'Twitter') href = 'https://x.com/DanhVThnh76295';
+                  }
+
+                  const isExternal = section.title === 'Follow Us';
+
+                  return (
+                    <li key={i}>
+                      <a
+                        href={href}
+                        onClick={onClick}
+                        className="hover:underline transition hover:text-primary"
+                        target={isExternal ? '_blank' : '_self'}
+                        rel={isExternal ? 'noopener noreferrer' : undefined}
+                      >
+                        {link}
+                      </a>
+                    </li>
+                  );
+                })}
               </ul>
             </div>
           ))}

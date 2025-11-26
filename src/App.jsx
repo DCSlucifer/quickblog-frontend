@@ -5,6 +5,7 @@ import Blog from './pages/Blog'
 import Layout from './pages/admin/Layout'
 import Dashboard from './pages/admin/Dashboard'
 import AddBlog from './pages/admin/AddBlog'
+import EditBlog from './pages/admin/EditBlog'
 import ListBlog from './pages/admin/ListBlog'
 import Comments from './pages/admin/Comments'
 import Login from './components/admin/Login'
@@ -25,6 +26,7 @@ const App = () => {
         <Route path='/admin' element={token ? <Layout/> : <Login/>}>
           <Route index element={<Dashboard/>}/>
           <Route path='addBlog' element={<AddBlog/>}/>
+          <Route path='edit-blog/:id' element={<EditBlog/>}/>
           <Route path='listBlog' element={<ListBlog/>}/>
           <Route path='comments' element={<Comments/>}/>
         </Route>

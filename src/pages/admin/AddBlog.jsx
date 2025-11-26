@@ -8,7 +8,7 @@ import { parse } from 'marked'
 const AddBlog = () => {
 
     const { axios } = useAppContext()
-    
+
     // Loading states
     const [isAdding, setIsAdding] = useState(false)
     const [loading, setLoading] = useState(false)
@@ -51,10 +51,10 @@ const AddBlog = () => {
 
             // Prepare blog data object
             const blog = {
-                title, 
-                subTitle, 
+                title,
+                subTitle,
                 description: quillRef.current.root.innerHTML,
-                category, 
+                category,
                 isPublished
             }
 
@@ -77,7 +77,12 @@ const AddBlog = () => {
                 toast.error(data.message)
             }
         } catch (error) {
-            toast.error(error.message)
+            // Handle error from backend (multer, validation, etc.)
+            if (error.response && error.response.data && error.response.data.message) {
+                toast.error(error.response.data.message);
+            } else {
+                toast.error(error.message || 'Failed to add blog');
+            }
         } finally {
             setIsAdding(false)
         }
@@ -98,39 +103,57 @@ const AddBlog = () => {
         {/* Upload thumbnail section */}
         <p>Upload thumbnail</p>
         <label htmlFor="image">
-            <img 
-              src={!image ? assets.upload_area : URL.createObjectURL(image)} 
-              alt="" 
+            <img
+              src={!image ? assets.upload_area : URL.createObjectURL(image)}
+              alt=""
               className='mt-2 h-16 rounded cursor-pointer'
             />
-            <input 
-              onChange={(e) => setImage(e.target.files[0])} 
-              type="file" 
-              id='image' 
-              hidden 
+            <input
+              onChange={(e) => {
+                const file = e.target.files[0];
+                if (file) {
+                  // Validate file type
+                  const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp', 'image/gif'];
+                  if (!allowedTypes.includes(file.type)) {
+                    toast.error('Invalid file type. Only JPEG, PNG, WebP and GIF images are allowed.');
+                    e.target.value = ''; // Clear the input
+                    return;
+                  }
+                  // Validate file size (5MB)
+                  if (file.size > 5 * 1024 * 1024) {
+                    toast.error('File too large. Maximum size is 5MB');
+                    e.target.value = ''; // Clear the input
+                    return;
+                  }
+                  setImage(file);
+                }
+              }}
+              type="file"
+              id='image'
+              hidden
               required
             />
         </label>
 
         {/* Blog title input */}
         <p className='mt-4'>Blog title</p>
-        <input 
-          type="text" 
-          placeholder='Type here' 
-          required 
-          className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded' 
-          onChange={(e) => setTitle(e.target.value)} 
+        <input
+          type="text"
+          placeholder='Type here'
+          required
+          className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded'
+          onChange={(e) => setTitle(e.target.value)}
           value={title}
         />
 
         {/* Sub title input */}
         <p className='mt-4'>Sub title</p>
-        <input 
-          type="text" 
-          placeholder='Type here' 
-          required 
-          className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded' 
-          onChange={(e) => setSubTitle(e.target.value)} 
+        <input
+          type="text"
+          placeholder='Type here'
+          required
+          className='w-full max-w-lg mt-2 p-2 border border-gray-300 outline-none rounded'
+          onChange={(e) => setSubTitle(e.target.value)}
           value={subTitle}
         />
 
@@ -139,18 +162,18 @@ const AddBlog = () => {
         <div className='max-w-lg h-74 pb-16 sm:pb-10 pt-2 relative'>
             {/* Quill editor container */}
             <div ref={editorRef}></div>
-            
+
             {/* Loading spinner overlay */}
-            {loading && ( 
+            {loading && (
             <div className='absolute right-0 top-0 bottom-0 left-0 flex items-center justify-center bg-black/10 mt-2'>
                 <div className='w-8 h-8 rounded-full border-2 border-t-white animate-spin'></div>
             </div> )}
-            
+
             {/* AI generation button */}
-            <button 
-              disabled={loading} 
-              type='button' 
-              onClick={generateContent} 
+            <button
+              disabled={loading}
+              type='button'
+              onClick={generateContent}
               className='absolute bottom-1 right-2 ml-2 text-xs text-white bg-black/70 px-4 py-1.5 rounded hover:underline cursor-pointer'
             >
               Generate with AI
@@ -159,9 +182,9 @@ const AddBlog = () => {
 
         {/* Category selection */}
         <p className='mt-4'>Blog category</p>
-        <select 
-          onChange={(e) => setCategory(e.target.value)} 
-          name="category" 
+        <select
+          onChange={(e) => setCategory(e.target.value)}
+          name="category"
           className='mt-2 px-3 py-2 border text-gray-500 border-gray-300 outline-none rounded'
         >
             <option value="">Select category</option>
@@ -173,18 +196,18 @@ const AddBlog = () => {
         {/* Publish checkbox */}
         <div className='flex gap-2 mt-4'>
             <p>Publish Now</p>
-            <input 
-              type="checkbox" 
-              checked={isPublished} 
-              className='scale-125 cursor-pointer' 
+            <input
+              type="checkbox"
+              checked={isPublished}
+              className='scale-125 cursor-pointer'
               onChange={(e) => setIsPublished(e.target.checked)}
             />
         </div>
 
         {/* Submit button */}
-        <button 
-          disabled={isAdding} 
-          type="submit" 
+        <button
+          disabled={isAdding}
+          type="submit"
           className='mt-8 w-40 h-10 bg-primary text-white rounded cursor-pointer text-sm'
         >
             {isAdding ? 'Adding...' : 'Add Blog'}

@@ -18,7 +18,8 @@ export const AppProvider = ({ children })=>{
 
     const fetchBlogs = async ()=>{
         try {
-           const {data} = await axios.get('/api/blog/all');
+           // Fetch all blogs (limit=1000 to get all)
+           const {data} = await axios.get('/api/blog/all?limit=1000');
            data.success ? setBlogs(data.blogs) : toast.error(data.message)
         } catch (error) {
             toast.error(error.message)
@@ -30,7 +31,7 @@ export const AppProvider = ({ children })=>{
         const token = localStorage.getItem('token')
         if(token){
             setToken(token);
-            axios.defaults.headers.common['Authorization'] = `${token}`;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         }
     },[])
 

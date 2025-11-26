@@ -1,68 +1,132 @@
-# Quick Blog: MERN Full-Stack Blog Platform with Gemini AI & Optimized Media
+# QuickBlog Platform
 
-This project delivers a production-ready, full-stack blog application leveraging the **MERN stack** (MongoDB, Express, React, Node). It features powerful integrations designed to streamline content creation via **Google Gemini AI** and ensure optimal media delivery through **ImageKit**. The application provides a comprehensive user experience alongside a fully featured administrative dashboard.
+## Project Overview
 
-The entire application structure is configured for seamless deployment using **Vercel**.
+QuickBlog is a production-grade, full-stack blogging platform engineered to deliver a seamless content management experience. It leverages the power of the MERN stack (MongoDB, Express.js, React, Node.js) integrated with advanced AI capabilities for content generation and robust media optimization pipelines. This repository contains the complete source code for both the RESTful API server and the responsive client application.
 
-## Feature Highlights
+## System Architecture
 
-### Content Management & AI
+The application follows a decoupled client-server architecture:
 
-- **AI-Powered Content Generation:** Administrators can automatically generate descriptive blog content and summaries using the integrated **Google Gemini API**, significantly speeding up the content creation workflow.
-- **Optimized Media Pipeline:** Integrates **ImageKit** for real-time media processing, including image storage, compression, and format conversion (e.g., converting to `.webp` format) to reduce file size and ensure fast loading across devices.
-- **Admin Dashboard:** Centralized panel for managing content, where admins can publish new blogs, manage existing posts (toggle publish/unpublish status), and monitor key metrics such (total blogs, comments, drafts).
-- **Secure Authentication:** Admin routes are protected using **JSON Web Tokens (JWT)** authentication.
-
-### User Experience (Frontend)
-
-- **Dynamic Filtering:** Users can filter blog lists by predefined categories such as Technology, Startup, Lifestyle, and Finance.
-- **Search Functionality:** Includes a search box for querying blogs by title or category.
-- **Interaction:** Supports reading posts, submitting comments, and utilizing social media icons for article sharing.
-- **Modern Frontend:** Built with **ReactJS (Vite)**, styled with **Tailwind CSS**, and features smooth UI transitions powered by **Motion**.
+-   **Backend (Server)**: A RESTful API built with Express.js, handling business logic, database interactions, authentication, and third-party integrations (AI, Image CDN).
+-   **Frontend (Client)**: A Single Page Application (SPA) built with React 19 and Vite, communicating with the backend via secure API endpoints.
+-   **Database**: MongoDB Atlas for scalable, document-based data storage.
 
 ## Technology Stack
 
-| Component          | Key Technologies                                       | Detail                                                                                                                             |
-| :----------------- | :----------------------------------------------------- | :--------------------------------------------------------------------------------------------------------------------------------- |
-| **Frontend**       | **ReactJS (Vite)**, **Tailwind CSS**, React Router DOM | Client-side application development and efficient routing. Includes **Quill** (Rich Text Editor) and **Moment** (Date formatting). |
-| **Backend**        | **NodeJS, ExpressJS**                                  | High-performance server-side environment.                                                                                          |
-| **Database**       | **MongoDB, Mongoose**                                  | Data persistence layer for storing blog and comment data.                                                                          |
-| **AI/Media**       | **Google Gemini** API, **ImageKit**, **Multer**        | AI content generation; Real-time media optimization; File handling middleware.                                                     |
-| **Authentication** | **JSON Web Token (JWT)**                               | Securing admin access and API routes.                                                                                              |
-| **Deployment**     | **Vercel**                                             | Hosting environment for both client and server applications.                                                                       |
+### Backend
+-   **Runtime**: Node.js
+-   **Framework**: Express.js v5
+-   **Database**: MongoDB (Mongoose ODM)
+-   **Authentication**: JWT (JSON Web Tokens)
+-   **AI Integration**: Google Gemini API (Generative AI)
+-   **Media Storage**: ImageKit (CDN & Optimization)
+-   **Documentation**: Swagger / OpenAPI
 
-## Getting Started
+### Frontend
+-   **Core**: React 19
+-   **Build System**: Vite
+-   **Styling**: Tailwind CSS v4
+-   **State Management**: Context API
+-   **HTTP Client**: Axios
+-   **Rich Text Editor**: Quill.js
 
-### Prerequisites
+## Prerequisites
 
-- Node.js & npm
-- MongoDB Atlas Account
-- ImageKit Account
-- Google AI Studio Account (for Gemini API Key)
+Ensure the following are installed on your local development environment:
+-   **Node.js**: v18.0.0 (LTS) or higher
+-   **npm**: v9.0.0 or higher
+-   **MongoDB**: Local instance or Atlas connection string
 
-### Installation
+## Installation & Setup
 
-1.  **Clone the repository:**
-    ```bash
-    git clone [repository-url]
-    cd quick-blog
-    ```
-2.  **Install Dependencies:** Run `npm install` in both the `client` and `server` directories.
-    ```bash
-    cd client && npm install
-    cd ../server && npm install
-    ```
+### 1. Clone the Repository
+```bash
+git clone <repository-url>
+cd QuickBlog-FullStack
+```
 
-### Configuration
+### 2. Backend Configuration
+Navigate to the server directory and install dependencies:
+```bash
+cd server
+npm install
+```
 
-1.  **Server `.env`:** Configure necessary credentials for database connection (`MONGODB_URI`), admin credentials, authentication (`JWT_SECRET`), and external services (`IMAGEKIT_*` keys, `GEMINI_API_KEY`).
-2.  **Client `.env`:** Set the base URL for the backend server (`VITE_BASE_URL`).
+Create a `.env` file in the `server` directory with the following configurations:
+```env
+# Server
+PORT=3000
+NODE_ENV=development
 
-### Running Locally
+# Database
+MONGODB_URI=mongodb+srv://<user>:<password>@<cluster>.mongodb.net/quickblog
 
-Run the client and server concurrently in separate terminal sessions:
+# Security
+JWT_SECRET=<your_secure_random_string>
+ADMIN_EMAIL=admin@example.com
+ADMIN_PASSWORD=secure_password
 
-| Component             | Command                          | Default Port            |
-| :-------------------- | :------------------------------- | :---------------------- |
-| **Backend (Server)**  | `npm run server` (using Nodemon) | `http://localhost:3000` |
-| **Frontend (Client)** | `npm run dev` (using Vite)       | `http://localhost:5173` |
+# Third-Party Services
+GEMINI_API_KEY=<your_google_gemini_key>
+IMAGEKIT_PUBLIC_KEY=<your_public_key>
+IMAGEKIT_PRIVATE_KEY=<your_private_key>
+IMAGEKIT_URL_ENDPOINT=https://ik.imagekit.io/<your_id>
+
+# CORS
+CLIENT_URL=http://localhost:5173
+```
+
+Start the backend server:
+```bash
+npm run server
+```
+*The API will be available at `http://localhost:3000`.*
+
+### 3. Frontend Configuration
+Open a new terminal, navigate to the client directory, and install dependencies:
+```bash
+cd ../client
+npm install
+```
+
+Create a `.env` file in the `client` directory:
+```env
+VITE_BASE_URL=http://localhost:3000
+```
+
+Start the development server:
+```bash
+npm run dev
+```
+*The application will launch at `http://localhost:5173`.*
+
+## API Documentation
+
+Comprehensive API documentation is available via Swagger UI.
+Once the server is running, navigate to:
+`http://localhost:3000/api-docs`
+
+## Key Features
+
+-   **AI-Powered Content**: Generate blog drafts automatically using Google Gemini.
+-   **Full-Text Search**: High-performance search with relevance scoring.
+-   **Role-Based Access Control**: Secure Admin dashboard for content moderation.
+-   **Media Optimization**: Automatic image compression and format conversion (WebP).
+-   **Request Logging**: Detailed tracking of API performance and errors.
+
+## Deployment
+
+### Backend
+Recommended platforms: **Render**, **Railway**, or **AWS EC2**.
+-   Ensure all environment variables from `.env` are configured in the deployment dashboard.
+
+### Frontend
+Recommended platforms: **Vercel** or **Netlify**.
+-   Build Command: `npm run build`
+-   Output Directory: `dist`
+-   Environment Variable: Set `VITE_BASE_URL` to your production backend URL.
+
+## License
+
+This project is licensed under the MIT License.

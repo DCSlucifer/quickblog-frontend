@@ -24,7 +24,7 @@ const Login = () => {
             setToken(data.token)
             localStorage.setItem('token', data.token)
             // Set default authorization header for future requests
-            axios.defaults.headers.common['Authorization'] = data.token;
+            axios.defaults.headers.common['Authorization'] = `Bearer ${data.token}`;
           }
           else {
             toast.error(data.message)
