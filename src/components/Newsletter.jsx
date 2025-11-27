@@ -3,15 +3,18 @@ import { useAppContext } from '../context/AppContext'
 import toast from 'react-hot-toast'
 
 const Newsletter = () => {
+  // Form state management
   const [email, setEmail] = useState('')
   const [loading, setLoading] = useState(false)
   const { axios } = useAppContext()
 
+  // Handle newsletter subscription form submission
   const handleSubmit = async (e) => {
     e.preventDefault()
     setLoading(true)
 
     try {
+      // Send subscription request to backend API
       const { data } = await axios.post('/api/subscriber/subscribe', { email })
 
       if (data.success) {
@@ -21,6 +24,7 @@ const Newsletter = () => {
         toast.error(data.message)
       }
     } catch (error) {
+      // Handle error with fallback message
       const errorMessage = error.response?.data?.message || 'Subscription failed. Please try again.'
       toast.error(errorMessage)
     } finally {
@@ -30,11 +34,18 @@ const Newsletter = () => {
 
   return (
     <div className='flex flex-col items-center justify-center text-center space-y-2 my-32'>
+      {/* Newsletter heading and description */}
       <h1 className='md:text-4xl text-2xl font-semibold'>Never Miss a Blog!</h1>
       <p className='md:text-lg text-gray-500/70 pb-8'>
         Subscribe to get the latest blog, new tech, and exclusive news.
       </p>
-      <form onSubmit={handleSubmit} className='flex items-center justify-between max-w-2xl w-full md:h-13 h-12'>
+      
+      {/* Subscription form */}
+      <form 
+        onSubmit={handleSubmit} 
+        className='flex items-center justify-between max-w-2xl w-full md:h-13 h-12'
+      >
+        {/* Email input field */}
         <input
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -44,6 +55,8 @@ const Newsletter = () => {
           required
           disabled={loading}
         />
+        
+        {/* Subscribe button with loading state */}
         <button
           type='submit'
           disabled={loading}
